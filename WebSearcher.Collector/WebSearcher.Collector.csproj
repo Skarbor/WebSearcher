@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebSearcher.Common\WebSearcher.Common.csproj" />
+    <ProjectReference Include="..\WebSearcher.DataAccess\WebSearcher.DataAccess.csproj" />
+    <ProjectReference Include="..\WebSearcher.Entities\WebSearcher.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
