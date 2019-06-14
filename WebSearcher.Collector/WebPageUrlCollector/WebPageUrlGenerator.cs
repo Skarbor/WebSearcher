@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebSearcher.Collector
+namespace WebSearcher.Collector.WebPageUrlCollector
 {
     public class WebPageUrlGenerator : IWebPageUrlGenerator
     {

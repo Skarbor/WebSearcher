@@ -6,7 +6,7 @@ using WebSearcher.DataAccess.Concrete;
 using WebSearcher.DataAccess.Context;
 using WebSearcher.Entities;
 
-namespace WebSearcher.Collector
+namespace WebSearcher.Collector.Synchronizer
 {
     public class WebPageDataSynchronizer : BaseDataSynchronizer<WebPage>
     {

@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSearcher.Collector
+namespace WebSearcher.Collector.WebPageUrlCollector
 {
     public class WebPageUrlChecker : IWebPageUrlChecker
     {

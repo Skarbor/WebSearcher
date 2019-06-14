@@ -3,15 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.App", "WebSearcher.App\WebSearcher.App.csproj", "{C912D39C-928A-48AE-9B2C-4D25FC38664F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.App", "WebSearcher.App\WebSearcher.App.csproj", "{C912D39C-928A-48AE-9B2C-4D25FC38664F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.Entities", "WebSearcher.Entities\WebSearcher.Entities.csproj", "{23B79BCF-C5E9-4DF4-9ECC-E9FEE4FA7172}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.Entities", "WebSearcher.Entities\WebSearcher.Entities.csproj", "{23B79BCF-C5E9-4DF4-9ECC-E9FEE4FA7172}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.DataAccess", "WebSearcher.DataAccess\WebSearcher.DataAccess.csproj", "{D9BFF791-52AF-44C4-95E9-3362369E7C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.DataAccess", "WebSearcher.DataAccess\WebSearcher.DataAccess.csproj", "{D9BFF791-52AF-44C4-95E9-3362369E7C76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.Common", "WebSearcher.Common\WebSearcher.Common.csproj", "{5BB18902-5980-4A27-A505-501ADA8DF790}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.Common", "WebSearcher.Common\WebSearcher.Common.csproj", "{5BB18902-5980-4A27-A505-501ADA8DF790}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.Collector", "WebSearcher.Collector\WebSearcher.Collector.csproj", "{473FC01C-AEBB-472E-A6B6-572A840F43A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.Collector", "WebSearcher.Collector\WebSearcher.Collector.csproj", "{473FC01C-AEBB-472E-A6B6-572A840F43A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlParser", "HtmlParser\HtmlParser.csproj", "{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HtmlParser", "HtmlParser", "{BA83E05A-4FCA-40C2-ABC4-69A691AC6099}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Collector", "Collector", "{26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.CollectorRunner", "WebSearcher.CollectorRunner\WebSearcher.CollectorRunner.csproj", "{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +47,22 @@ Global
 		{473FC01C-AEBB-472E-A6B6-572A840F43A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473FC01C-AEBB-472E-A6B6-572A840F43A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473FC01C-AEBB-472E-A6B6-572A840F43A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{473FC01C-AEBB-472E-A6B6-572A840F43A2} = {26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}
+		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39} = {BA83E05A-4FCA-40C2-ABC4-69A691AC6099}
+		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00} = {26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52ACAEC5-F428-4473-A459-C698B42041D2}

@@ -6,10 +6,12 @@ using WebSearcher.DataAccess.Abstract;
 using WebSearcher.DataAccess.Context;
 using WebSearcher.Entities;
 
-namespace WebSearcher.Collector
+namespace WebSearcher.Collector.Synchronizer
 {
     public abstract class BaseDataSynchronizer<T> where T: Entity
     {
+        private static readonly object SyncObject = new object();
+
         protected readonly ILogger _logger = new Logger();
         protected readonly IEntityRepository<T> _entityRepository;
 
@@ -31,10 +33,12 @@ namespace WebSearcher.Collector
 
         public virtual void AddIfUniqe(T entity)
         {
-            if (!_data.Contains(entity))
+            lock (SyncObject)
             {
-                _data.Add(entity);
-                _addedDataNotYetSync.Add(entity);
+                if (!_data.Contains(entity) && !_addedDataNotYetSync.Contains(entity))
+                {
+                    _addedDataNotYetSync.Add(entity);
+                }
             }
 
             if (ShouldSync())
@@ -47,7 +51,11 @@ namespace WebSearcher.Collector
         {
             _logger.Info($"Synchronize with data sorce for {typeof(T)} entity...");
 
-            _entityRepository.AddBulk(_addedDataNotYetSync);
+            lock (SyncObject)
+            {
+                _entityRepository.AddBulk(_addedDataNotYetSync);
+                (_data as List<T>).AddRange(_addedDataNotYetSync);
+            }
             _addedDataNotYetSync = new List<T>();
         }
 

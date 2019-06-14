@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using WebSearcher.Collector.Synchronizer;
 
-namespace WebSearcher.Collector
+namespace WebSearcher.Collector.WebPageUrlCollector
 {
-    public class WebPageUrlCollector
+    public class WebPageUrlCollector : ICollector
     {
         private IWebPageUrlGenerator _urlGenerator { get; set; }
         private IWebPageUrlChecker _urlChecker { get; set; }
         private WebPageDataSynchronizer _webPageDataSynchronizer { get; set; }
+
         public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker())
         {}
 
@@ -42,7 +44,7 @@ namespace WebSearcher.Collector
             {
                 TryRandomWebpage();
                 Thread.Sleep(20);
-            }    
+            }
         }
     }
 }

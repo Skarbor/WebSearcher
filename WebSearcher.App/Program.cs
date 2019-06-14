@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using WebSearcher.Collector;
+using WebSearcher.Collector.Synchronizer;
+using WebSearcher.Collector.WebPageSubpagesCollector;
+using WebSearcher.Collector.WebPageUrlCollector;
 using WebSearcher.DataAccess.Concrete;
 
 namespace WebSearcher.App
@@ -18,7 +21,7 @@ namespace WebSearcher.App
 
         static void Main(string[] args)
         {
-            WebPageUrlCollector collector = new WebPageUrlCollector();
+            WebPageSubpagesCollector collector = new WebPageSubpagesCollector();
 
             collector.Start();
 
