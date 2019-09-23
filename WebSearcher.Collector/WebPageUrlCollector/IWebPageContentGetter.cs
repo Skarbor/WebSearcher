@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebSearcher.Collector.WebPageUrlCollector
+﻿namespace WebSearcher.Collector.WebPageUrlCollector
 {
-    interface IWebPageContentGetter
+    public interface IWebPageContentGetter
     {
         string GetWebPageContent(string url);
     }

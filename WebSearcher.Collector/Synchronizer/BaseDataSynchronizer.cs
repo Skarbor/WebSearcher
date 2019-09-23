@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WebSearcher.Common.Logger;
 using WebSearcher.DataAccess.Abstract;
-using WebSearcher.DataAccess.Context;
 using WebSearcher.Entities;
 
 namespace WebSearcher.Collector.Synchronizer
@@ -15,8 +12,8 @@ namespace WebSearcher.Collector.Synchronizer
         protected readonly ILogger _logger = new Logger();
         protected readonly IEntityRepository<T> _entityRepository;
 
-        private IList<T> _data;
-        private IList<T> _addedDataNotYetSync = new List<T>();
+        private IList<T> _synchronizedData;
+        private IList<T> _addedDataNotYetSynchronized = new List<T>();
 
         public BaseDataSynchronizer(IEntityRepository<T> entityRepository)
         {
@@ -28,16 +25,16 @@ namespace WebSearcher.Collector.Synchronizer
         {
             _logger.Info($"Initializing data synchronizer for {typeof(T)} entity...");
 
-            _data = new List<T>(_entityRepository.GetAll());
+            _synchronizedData = new List<T>(_entityRepository.GetAll());
         }
 
         public virtual void AddIfUniqe(T entity)
         {
             lock (SyncObject)
             {
-                if (!_data.Contains(entity) && !_addedDataNotYetSync.Contains(entity))
+                if (!_synchronizedData.Contains(entity) && !_addedDataNotYetSynchronized.Contains(entity))
                 {
-                    _addedDataNotYetSync.Add(entity);
+                    _addedDataNotYetSynchronized.Add(entity);
                 }
             }
 
@@ -49,19 +46,19 @@ namespace WebSearcher.Collector.Synchronizer
 
         public virtual void Sync()
         {
-            _logger.Info($"Synchronize with data sorce for {typeof(T)} entity...");
+            _logger.Debug($"Synchronize with data sorce for {typeof(T)} entity...");
 
             lock (SyncObject)
             {
-                _entityRepository.AddBulk(_addedDataNotYetSync);
-                (_data as List<T>).AddRange(_addedDataNotYetSync);
+                _entityRepository.AddBulk(_addedDataNotYetSynchronized);
+                (_synchronizedData as List<T>).AddRange(_addedDataNotYetSynchronized);
             }
-            _addedDataNotYetSync = new List<T>();
+            _addedDataNotYetSynchronized = new List<T>();
         }
 
         private bool ShouldSync()
         {
-            if (_addedDataNotYetSync.Count > 10) return true;
+            if (_addedDataNotYetSynchronized.Count > 10) return true;
 
             return false;
         }

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using WebSearcher.Collector.Synchronizer;
+using WebSearcher.Common.Logger;
 
 namespace WebSearcher.Collector.WebPageUrlCollector
 {
@@ -8,6 +8,7 @@ namespace WebSearcher.Collector.WebPageUrlCollector
     {
         private IWebPageUrlGenerator _urlGenerator { get; set; }
         private IWebPageUrlChecker _urlChecker { get; set; }
+        protected readonly ILogger _logger = new Logger();
         private WebPageDataSynchronizer _webPageDataSynchronizer { get; set; }
 
         public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker())
@@ -28,11 +29,11 @@ namespace WebSearcher.Collector.WebPageUrlCollector
 
             if (isWebPageWorking)
             {
-                Console.WriteLine($"Found working webpage with url: {randomWebPage}");
+                _logger.Debug($"Found working webpage with url: {randomWebPage}");
                 _webPageDataSynchronizer.AddIfUniqe(new Entities.WebPage() { Url = randomWebPage });
             }
             else {
-                Console.WriteLine($"Url: {randomWebPage} not wokring");
+                _logger.Debug($"Url: {randomWebPage} not wokring");
             }
         }
 
