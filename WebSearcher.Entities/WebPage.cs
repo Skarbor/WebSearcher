@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebSearcher.Entities
+﻿namespace WebSearcher.Entities
 {
     public class WebPage : Entity
     {

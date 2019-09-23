@@ -1,28 +1,37 @@
 ﻿using HtmlParser.Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HtmlParser
 {
-    public static class HtmlParser
+    public class HtmlParser
     {
-        public static HtmlDocument Parse(string htmlContent)
+        public HtmlDocument Parse(string htmlContent)
         {
             var document = new HtmlDocument();
 
-            GetLinks(htmlContent);
+            document.Links = GetLinks(htmlContent);
 
-            return null;
+            return document;
         }
 
-        private static IEnumerable<Link> GetLinks(string htmlContent)
+        private IList<Link> GetLinks(string htmlContent)
         {
-            Regex rx = new Regex(@"\ba href=\b");
-            var x = rx.GetGroupNames();
+            string hrefGroupName = "href";
+            string getLinksHrefRegex = "<a href=['\"](?<href>h?t?t?p?s?:?/?/?[a-zA-Z-0-9.]*)['\"]";
+            Regex rx = new Regex(getLinksHrefRegex);
+            var x = rx.Matches(htmlContent);
 
-            return null;
+            var links = new List<Link>();
+            foreach (Match match in x)
+            {
+                foreach (Group group in match.Groups[hrefGroupName].Captures)
+                {
+                    links.Add(new Link() { Url = group.Value });
+                }
+            }
+
+            return links;
         }
     }
 }

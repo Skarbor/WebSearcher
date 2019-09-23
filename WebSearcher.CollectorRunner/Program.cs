@@ -12,7 +12,7 @@ namespace WebSearcher.CollectorRunner
         static void Main(string[] args)
         {
             var collectors = new List<ICollector>();
-            collectors.Add(new WebPageUrlCollector());
+            //collectors.Add(new WebPageUrlCollector());
             collectors.Add(new WebPageSubpagesCollector());
 
             foreach (var collector in collectors)

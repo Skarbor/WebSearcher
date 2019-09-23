@@ -19,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HtmlParser", "HtmlParser", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Collector", "Collector", "{26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearcher.CollectorRunner", "WebSearcher.CollectorRunner\WebSearcher.CollectorRunner.csproj", "{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearcher.CollectorRunner", "WebSearcher.CollectorRunner\WebSearcher.CollectorRunner.csproj", "{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlParser.Tests", "HtmlParser.Tests\HtmlParser.Tests.csproj", "{3B9FD875-7FBE-4E4F-8770-5F5684A512F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B9FD875-7FBE-4E4F-8770-5F5684A512F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B9FD875-7FBE-4E4F-8770-5F5684A512F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B9FD875-7FBE-4E4F-8770-5F5684A512F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B9FD875-7FBE-4E4F-8770-5F5684A512F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{473FC01C-AEBB-472E-A6B6-572A840F43A2} = {26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}
 		{DE7A03AE-BDEA-44EB-99C0-D0990A9BEA39} = {BA83E05A-4FCA-40C2-ABC4-69A691AC6099}
 		{00C73FE2-92D8-4D99-BCBB-AABE5A564F00} = {26B7C842-FFDB-4D5D-9FB2-2EA3220DEE62}
+		{3B9FD875-7FBE-4E4F-8770-5F5684A512F2} = {BA83E05A-4FCA-40C2-ABC4-69A691AC6099}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52ACAEC5-F428-4473-A459-C698B42041D2}

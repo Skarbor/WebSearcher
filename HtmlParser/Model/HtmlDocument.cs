@@ -6,7 +6,7 @@ namespace HtmlParser.Model
 {
     public class HtmlDocument
     {
-        public IEnumerable<Link> Links { get; }
+        public IList<Link> Links { get; set; }
 
         public HtmlDocument()
         {

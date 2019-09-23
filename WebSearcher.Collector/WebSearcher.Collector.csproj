@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HtmlParser\HtmlParser.csproj" />
     <ProjectReference Include="..\WebSearcher.Common\WebSearcher.Common.csproj" />
     <ProjectReference Include="..\WebSearcher.DataAccess\WebSearcher.DataAccess.csproj" />
     <ProjectReference Include="..\WebSearcher.Entities\WebSearcher.Entities.csproj" />
