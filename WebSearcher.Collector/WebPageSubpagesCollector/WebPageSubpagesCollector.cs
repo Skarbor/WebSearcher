@@ -1,28 +1,29 @@
 ﻿using System;
 using WebSearcher.Collector.Synchronizer;
 using WebSearcher.Collector.WebPageUrlCollector;
+using WebSearcher.Common;
 using WebSearcher.Common.Logger;
 using WebSearcher.DataAccess.Concrete;
 using WebSearcher.DataAccess.Context;
 using WebSearcher.Entities;
 
-namespace WebSearcher.Collector.WebPageSubpagesCollector
+namespace WebSearcher.Collector.WebPageSubPagesCollector
 {
-    public class WebPageSubpagesCollector : ICollector
+    public class WebPageSubPagesCollector : ICollector
     {
         private readonly IWebPageUrlChecker _webPageUrlChecker;
         private readonly IWebPageContentGetter _webPageContentGetter;
-        protected readonly ILogger _logger = new Logger();
+        private readonly ILogger _logger = new Logger();
         private readonly HtmlParser.HtmlParser _htmlParser = new HtmlParser.HtmlParser();
         private readonly EntityRepository<WebPage> _entityRepository = new EntityRepository<WebPage>(new WebPageContext());
-        
-        private WebPageDataSynchronizer _webPageDataSynchronizer { get; set; }
-        private WebPageConnectionsSynchronizer _webPageConnectionsSynchronizer { get; set; }
 
-        public WebPageSubpagesCollector() : this(new WebPageUrlChecker(), new WebPageContentGetter())
+        private readonly WebPageDataSynchronizer _webPageDataSynchronizer;
+        private readonly WebPageConnectionsSynchronizer _webPageConnectionsSynchronizer;
+
+        public WebPageSubPagesCollector() : this(new WebPageUrlChecker(), new WebPageContentGetter())
         {}
 
-        public WebPageSubpagesCollector(IWebPageUrlChecker webPageUrlChecker, IWebPageContentGetter webPageContentGetter)
+        public WebPageSubPagesCollector(IWebPageUrlChecker webPageUrlChecker, IWebPageContentGetter webPageContentGetter)
         {
             _webPageUrlChecker = webPageUrlChecker;
             _webPageContentGetter = webPageContentGetter;
@@ -31,7 +32,7 @@ namespace WebSearcher.Collector.WebPageSubpagesCollector
         }
 
 
-        private async void ResolveSubpagesForWebPage(WebPage webPage)
+        private async void ResolveSubPagesForWebPage(WebPage webPage)
         {
             try
             {
@@ -45,14 +46,14 @@ namespace WebSearcher.Collector.WebPageSubpagesCollector
                     if (isWebPageWorking)
                     {
                         _logger.Debug($"Found working webpage with url: {link.Url}");
-                        _webPageDataSynchronizer.AddIfUnique(new Entities.WebPage() { Url = link.Url });
+                        _webPageDataSynchronizer.AddIfUnique(new WebPage() { Url = link.Url });
 
-                        _logger.Debug($"Adding connection betwen {webPage.Url} and {link.Url} to database");
+                        _logger.Debug($"Adding connection between {webPage.Url} and {link.Url} to database");
                         _webPageConnectionsSynchronizer.AddIfUnique(new WebPageConnections() { WebPageFromId = webPage.Id, WebPageToUrl = link.Url });
                     }
                     else
                     {
-                        _logger.Debug($"Url: {link.Url} not wokring");
+                        _logger.Debug($"Url: {link.Url} not working");
                     }
                 }
             }
@@ -66,7 +67,7 @@ namespace WebSearcher.Collector.WebPageSubpagesCollector
         {
             foreach (var item in _entityRepository.GetAll())
             {
-                ResolveSubpagesForWebPage(item);
+                ResolveSubPagesForWebPage(item);
             }
         }
     }

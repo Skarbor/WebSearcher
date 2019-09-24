@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebSearcher.Collector.WebPageUrlCollector
+﻿namespace WebSearcher.Collector.WebPageUrlCollector
 {
     public interface IWebPageUrlGenerator
     {

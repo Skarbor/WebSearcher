@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace WebSearcher.Collector.WebPageUrlCollector
@@ -10,14 +9,14 @@ namespace WebSearcher.Collector.WebPageUrlCollector
         {
             var randomizer = new Random();
 
-            int randomLenght = randomizer.Next(3, 20);
+            int randomLength = randomizer.Next(3, 20);
 
             var randomUrl = new StringBuilder();
 
             var minValueOfUrlCharacter = (int)'a';
             var maxValueOfUrlCharacter = (int)'z';
 
-            for (int i = 0; i < randomLenght; i++)
+            for (int i = 0; i < randomLength; i++)
             {
                 var character = (char)randomizer.Next(minValueOfUrlCharacter, maxValueOfUrlCharacter);
 

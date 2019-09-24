@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using WebSearcher.Collector;
-using WebSearcher.Collector.WebPageSubpagesCollector;
-using WebSearcher.Collector.WebPageUrlCollector;
+using WebSearcher.Collector.WebPageSubPagesCollector;
 
 namespace WebSearcher.CollectorRunner
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var collectors = new List<ICollector>();
+            var collectors = new List<ICollector> {new WebPageSubPagesCollector()};
             //collectors.Add(new WebPageUrlCollector());
-            collectors.Add(new WebPageSubpagesCollector());
 
             foreach (var collector in collectors)
             {
-                Thread t = new Thread(collector.Start);
+                var t = new Thread(collector.Start);
                 t.Start();
             }
         }

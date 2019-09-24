@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSearcher.Collector.WebPageUrlCollector
+namespace WebSearcher.Common
 {
     public class WebPageUrlChecker : IWebPageUrlChecker
     {
@@ -13,7 +11,7 @@ namespace WebSearcher.Collector.WebPageUrlCollector
             try
             {
                 var req = WebRequest.Create(pageUrl);
-                WebResponse res = req.GetResponse();
+                req.GetResponse();
                 return true;
             }
             catch (Exception)
@@ -28,7 +26,7 @@ namespace WebSearcher.Collector.WebPageUrlCollector
             try
             {
                 var req = WebRequest.Create(pageUrl);
-                WebResponse res = await req.GetResponseAsync();
+                await req.GetResponseAsync();
                 return true;
             }
             catch (Exception)

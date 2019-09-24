@@ -46,7 +46,7 @@ namespace WebSearcher.Collector.Synchronizer
 
         public virtual void Sync()
         {
-            Logger.Debug($"Synchronize with data sorce for {typeof(T)} entity...");
+            Logger.Debug($"Synchronize with data source for {typeof(T)} entity...");
 
             lock (SyncObject)
             {

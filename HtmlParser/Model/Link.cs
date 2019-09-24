@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HtmlParser.Model
+﻿namespace HtmlParser.Model
 {
     public class Link
     {

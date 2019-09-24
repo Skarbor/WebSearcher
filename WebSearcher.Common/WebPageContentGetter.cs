@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 
-namespace WebSearcher.Collector.WebPageUrlCollector
+namespace WebSearcher.Common
 {
     public class WebPageContentGetter : IWebPageContentGetter
     {

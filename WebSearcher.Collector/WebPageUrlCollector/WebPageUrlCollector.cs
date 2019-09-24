@@ -1,15 +1,16 @@
 ﻿using System.Threading;
 using WebSearcher.Collector.Synchronizer;
+using WebSearcher.Common;
 using WebSearcher.Common.Logger;
 
 namespace WebSearcher.Collector.WebPageUrlCollector
 {
     public class WebPageUrlCollector : ICollector
     {
-        private IWebPageUrlGenerator _urlGenerator { get; set; }
-        private IWebPageUrlChecker _urlChecker { get; set; }
-        protected readonly ILogger _logger = new Logger();
-        private WebPageDataSynchronizer _webPageDataSynchronizer { get; set; }
+        private readonly IWebPageUrlGenerator _urlGenerator;
+        private readonly IWebPageUrlChecker _urlChecker;
+        private readonly ILogger _logger = new Logger();
+        private readonly WebPageDataSynchronizer _webPageDataSynchronizer;
 
         public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker())
         {}

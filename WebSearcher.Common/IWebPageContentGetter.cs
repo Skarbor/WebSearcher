@@ -1,4 +1,4 @@
-﻿namespace WebSearcher.Collector.WebPageUrlCollector
+﻿namespace WebSearcher.Common
 {
     public interface IWebPageContentGetter
     {
