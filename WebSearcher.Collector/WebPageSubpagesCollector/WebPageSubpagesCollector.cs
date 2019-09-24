@@ -45,10 +45,10 @@ namespace WebSearcher.Collector.WebPageSubpagesCollector
                     if (isWebPageWorking)
                     {
                         _logger.Debug($"Found working webpage with url: {link.Url}");
-                        _webPageDataSynchronizer.AddIfUniqe(new Entities.WebPage() { Url = link.Url });
+                        _webPageDataSynchronizer.AddIfUnique(new Entities.WebPage() { Url = link.Url });
 
                         _logger.Debug($"Adding connection betwen {webPage.Url} and {link.Url} to database");
-                        _webPageConnectionsSynchronizer.AddIfUniqe(new WebPageConnections() { WebPageFromId = webPage.Id, WebPageToUrl = link.Url });
+                        _webPageConnectionsSynchronizer.AddIfUnique(new WebPageConnections() { WebPageFromId = webPage.Id, WebPageToUrl = link.Url });
                     }
                     else
                     {

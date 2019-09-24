@@ -30,7 +30,7 @@ namespace WebSearcher.Collector.WebPageUrlCollector
             if (isWebPageWorking)
             {
                 _logger.Debug($"Found working webpage with url: {randomWebPage}");
-                _webPageDataSynchronizer.AddIfUniqe(new Entities.WebPage() { Url = randomWebPage });
+                _webPageDataSynchronizer.AddIfUnique(new Entities.WebPage() { Url = randomWebPage });
             }
             else {
                 _logger.Debug($"Url: {randomWebPage} not wokring");

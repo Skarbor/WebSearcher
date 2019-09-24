@@ -9,26 +9,26 @@ namespace WebSearcher.Collector.Synchronizer
     {
         private static readonly object SyncObject = new object();
 
-        protected readonly ILogger _logger = new Logger();
-        protected readonly IEntityRepository<T> _entityRepository;
+        protected readonly ILogger Logger = new Logger();
+        protected readonly IEntityRepository<T> EntityRepository;
 
         private IList<T> _synchronizedData;
         private IList<T> _addedDataNotYetSynchronized = new List<T>();
 
-        public BaseDataSynchronizer(IEntityRepository<T> entityRepository)
+        protected BaseDataSynchronizer(IEntityRepository<T> entityRepository)
         {
-            _entityRepository = entityRepository;
+            EntityRepository = entityRepository;
             Initialize();
         }
 
         private void Initialize()
         {
-            _logger.Info($"Initializing data synchronizer for {typeof(T)} entity...");
+            Logger.Info($"Initializing data synchronizer for {typeof(T)} entity...");
 
-            _synchronizedData = new List<T>(_entityRepository.GetAll());
+            _synchronizedData = new List<T>(EntityRepository.GetAll());
         }
 
-        public virtual void AddIfUniqe(T entity)
+        public virtual void AddIfUnique(T entity)
         {
             lock (SyncObject)
             {
@@ -46,19 +46,22 @@ namespace WebSearcher.Collector.Synchronizer
 
         public virtual void Sync()
         {
-            _logger.Debug($"Synchronize with data sorce for {typeof(T)} entity...");
+            Logger.Debug($"Synchronize with data sorce for {typeof(T)} entity...");
 
             lock (SyncObject)
             {
-                _entityRepository.AddBulk(_addedDataNotYetSynchronized);
-                (_synchronizedData as List<T>).AddRange(_addedDataNotYetSynchronized);
+                EntityRepository.AddBulk(_addedDataNotYetSynchronized);
+                ((List<T>) _synchronizedData).AddRange(_addedDataNotYetSynchronized);
+                _addedDataNotYetSynchronized = new List<T>();
             }
-            _addedDataNotYetSynchronized = new List<T>();
         }
 
         private bool ShouldSync()
         {
-            if (_addedDataNotYetSynchronized.Count > 10) return true;
+            lock (SyncObject)
+            {
+                if (_addedDataNotYetSynchronized.Count > 10) return true;
+            }
 
             return false;
         }
