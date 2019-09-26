@@ -10,9 +10,9 @@ namespace WebSearcher.DataAccess.Concrete
 {
     public class EntityRepository<T>: IEntityRepository<T> where T: Entity
     {
-        private readonly BaseEntityContext<T> _baseEntityContext;
+        private readonly WebSearcherContext<T> _baseEntityContext;
 
-        public EntityRepository(BaseEntityContext<T> baseEntityContext)
+        public EntityRepository(WebSearcherContext<T> baseEntityContext)
         {
             _baseEntityContext = baseEntityContext;
         }

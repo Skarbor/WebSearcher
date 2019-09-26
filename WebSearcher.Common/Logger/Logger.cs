@@ -6,12 +6,12 @@ namespace WebSearcher.Common.Logger
     {
         public void Debug(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Error(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Error(Exception exception)

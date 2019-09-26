@@ -4,9 +4,9 @@ using WebSearcher.Entities;
 
 namespace WebSearcher.Collector.Synchronizer
 {
-    public class WebPageConnectionsSynchronizer : BaseDataSynchronizer<WebPageConnections>
+    public class WebPageConnectionsSynchronizer : BaseDataSynchronizer<WebPageConnection>
     {
-        public WebPageConnectionsSynchronizer() : base(new EntityRepository<WebPageConnections>(new WebPageConnectionsContext()))
+        public WebPageConnectionsSynchronizer() : base(new EntityRepository<WebPageConnection>(new WebSearcherContext<WebPageConnection>()))
         { }
     }
 }

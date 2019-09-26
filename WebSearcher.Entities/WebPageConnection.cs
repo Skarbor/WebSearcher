@@ -1,6 +1,6 @@
 ﻿namespace WebSearcher.Entities
 {
-    public class WebPageConnections : Entity
+    public class WebPageConnection : Entity
     {
         public int WebPageFromId { get; set; }
         public int WebPageToId { get; set; }

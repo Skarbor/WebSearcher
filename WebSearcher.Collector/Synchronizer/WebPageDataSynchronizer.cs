@@ -6,7 +6,7 @@ namespace WebSearcher.Collector.Synchronizer
 {
     public class WebPageDataSynchronizer : BaseDataSynchronizer<WebPage>
     {
-        public WebPageDataSynchronizer() : base(new EntityRepository<WebPage>(new WebPageContext()))
+        public WebPageDataSynchronizer() : base(new EntityRepository<WebPage>(new WebSearcherContext<WebPage>()))
         {}
     }
 }
