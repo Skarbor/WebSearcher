@@ -2,6 +2,7 @@
 using WebSearcher.Collector.Synchronizer;
 using WebSearcher.Common;
 using WebSearcher.Common.Logger;
+using WebSearcher.Entities;
 
 namespace WebSearcher.Collector.WebPageUrlCollector
 {
@@ -10,16 +11,16 @@ namespace WebSearcher.Collector.WebPageUrlCollector
         private readonly IWebPageUrlGenerator _urlGenerator;
         private readonly IWebPageUrlChecker _urlChecker;
         private readonly ILogger _logger = new Logger();
-        private readonly WebPageDataSynchronizer _webPageDataSynchronizer;
+        private readonly DataSynchronizer<WebPage> _webPageDataSynchronizer;
 
-        public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker())
+        public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker(), new DataSynchronizerFactory())
         {}
 
-        public WebPageUrlCollector(IWebPageUrlGenerator webPageUrlGenerator, IWebPageUrlChecker webPageUrlChecker)
+        public WebPageUrlCollector(IWebPageUrlGenerator webPageUrlGenerator, IWebPageUrlChecker webPageUrlChecker, IDataSynchronizerFactory dataSynchronizerFactory)
         {
             _urlGenerator = webPageUrlGenerator;
             _urlChecker = webPageUrlChecker;
-            _webPageDataSynchronizer = new WebPageDataSynchronizer();
+            _webPageDataSynchronizer = dataSynchronizerFactory.CreateDataSynchronizer<WebPage>();
         }
 
         private async void TryRandomWebpage()

@@ -5,19 +5,18 @@ using WebSearcher.Entities;
 
 namespace WebSearcher.Collector.Synchronizer
 {
-    public abstract class BaseDataSynchronizer<T> where T: Entity
+    public class DataSynchronizer<T> where T : Entity
     {
-        private static readonly object SyncObject = new object();
-
         protected readonly ILogger Logger = new Logger();
         protected readonly IEntityRepository<T> EntityRepository;
 
         private IList<T> _synchronizedData;
         private IList<T> _addedDataNotYetSynchronized = new List<T>();
+        private static readonly object SyncObject = new object();
 
-        protected BaseDataSynchronizer(IEntityRepository<T> entityRepository)
+        public DataSynchronizer(IEntityRepositoryFactory entityRepositoryFactory)
         {
-            EntityRepository = entityRepository;
+            EntityRepository = entityRepositoryFactory.CreateEntityRepository<T>();
             Initialize();
         }
 
@@ -51,7 +50,7 @@ namespace WebSearcher.Collector.Synchronizer
             lock (SyncObject)
             {
                 EntityRepository.AddBulk(_addedDataNotYetSynchronized);
-                ((List<T>) _synchronizedData).AddRange(_addedDataNotYetSynchronized);
+                ((List<T>)_synchronizedData).AddRange(_addedDataNotYetSynchronized);
                 _addedDataNotYetSynchronized = new List<T>();
             }
         }
