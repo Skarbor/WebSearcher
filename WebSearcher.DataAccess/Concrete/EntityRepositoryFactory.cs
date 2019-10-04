@@ -8,7 +8,12 @@ namespace WebSearcher.DataAccess.Concrete
     {
         public IEntityRepository<T> CreateEntityRepository<T>() where T : Entity
         {
-            return new EntityRepository<T>(new WebSearcherContext<T>());
+            return new EntityRepository<T>(new WebSearcherContext());
+        }
+
+        public IEntityRepository<T> CreateEntityRepository<T>(WebSearcherContext context) where T : Entity
+        {
+            return new EntityRepository<T>(context);
         }
     }
 }

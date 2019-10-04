@@ -2,6 +2,7 @@
 using System.Threading;
 using WebSearcher.Collector;
 using WebSearcher.Collector.WebPageSubPagesCollector;
+using WebSearcher.Collector.WebPageUrlCollector;
 
 namespace WebSearcher.CollectorRunner
 {
@@ -9,9 +10,8 @@ namespace WebSearcher.CollectorRunner
     {
         static void Main()
         {
-            var collectors = new List<ICollector> {new WebPageSubPagesCollector()};
-            //collectors.Add(new WebPageUrlCollector());
-
+            var collectors = new List<ICollector> { new WebPageUrlCollector(), new WebPageSubPagesCollector()};
+            
             foreach (var collector in collectors)
             {
                 var t = new Thread(collector.Start);

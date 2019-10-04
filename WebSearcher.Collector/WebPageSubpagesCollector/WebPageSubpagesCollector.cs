@@ -1,5 +1,6 @@
-﻿using System;
-using WebSearcher.Collector.Synchronizer;
+﻿using HtmlParser.Model;
+using System;
+using System.Collections.Generic;
 using WebSearcher.Common;
 using WebSearcher.Common.Logger;
 using WebSearcher.DataAccess.Abstract;
@@ -12,32 +13,26 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
     {
         private readonly IWebPageUrlChecker _webPageUrlChecker;
         private readonly IWebPageContentGetter _webPageContentGetter;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
         private readonly ILogger _logger = new Logger();
         private readonly HtmlParser.HtmlParser _htmlParser = new HtmlParser.HtmlParser();
-        private readonly IEntityRepository<WebPage> _entityRepository;
-        private readonly DataSynchronizer<WebPage> _webPagsSynchronizer;
-        private readonly DataSynchronizer<WebPageConnection> _webPageConnectionsSynchronizer;
 
-        public WebPageSubPagesCollector() : this(new WebPageUrlChecker(), new WebPageContentGetter(), new EntityRepositoryFactory(), new DataSynchronizerFactory())
+        public WebPageSubPagesCollector() : this(new WebPageUrlChecker(), new WebPageContentGetter(), new UnitOfWorkFactory())
         {}
 
-        public WebPageSubPagesCollector(IWebPageUrlChecker webPageUrlChecker, IWebPageContentGetter webPageContentGetter, IEntityRepositoryFactory entityRepositoryFactory, IDataSynchronizerFactory dataSynchronizerFactory)
+        public WebPageSubPagesCollector(IWebPageUrlChecker webPageUrlChecker, IWebPageContentGetter webPageContentGetter, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _webPageUrlChecker = webPageUrlChecker;
             _webPageContentGetter = webPageContentGetter;
-
-            _entityRepository = entityRepositoryFactory.CreateEntityRepository<WebPage>();
-            _webPagsSynchronizer = dataSynchronizerFactory.CreateDataSynchronizer<WebPage>();
-            _webPageConnectionsSynchronizer = dataSynchronizerFactory.CreateDataSynchronizer<WebPageConnection>();
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
-
 
         private async void ResolveSubPagesForWebPage(WebPage webPage)
         {
             try
             {
-                var content = _webPageContentGetter.GetWebPageContent(webPage.Url);
-                var links = _htmlParser.Parse(content).Links;
+                var links = GetLinksFromWebPage(webPage);
 
                 foreach (var link in links)
                 {
@@ -45,11 +40,33 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
 
                     if (isWebPageWorking)
                     {
-                        _logger.Debug($"Found working webpage with url: {link.Url}");
-                        _webPagsSynchronizer.AddIfUnique(new WebPage() { Url = link.Url });
+                        using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
+                        {
+                            var webPageFromLink = unitOfWork.WebPages.Find(_webPage => _webPage.Url == link.Url);
 
-                        _logger.Debug($"Adding connection between {webPage.Url} and {link.Url} to database");
-                        _webPageConnectionsSynchronizer.AddIfUnique(new WebPageConnection() { WebPageFromId = webPage.Id, WebPageToUrl = link.Url });
+                            if (webPageFromLink == null)
+                            {
+                                _logger.Debug($"Found working webpage with url: {link.Url}");
+                                webPageFromLink = new WebPage() { Url = link.Url };
+                                unitOfWork.WebPages.Add(webPageFromLink);
+
+                                _logger.Debug($"Adding connection between {webPage.Url} and {link.Url} to database");
+                                unitOfWork.WebPagesConnections.Add(new WebPageConnection() { WebPageFrom = webPage, WebPageTo = webPageFromLink });
+                            }
+                            else
+                            {
+                                var connection = unitOfWork.WebPagesConnections.Find(_webPageConnection => _webPageConnection.WebPageFrom.Url == webPage.Url 
+                                                && _webPageConnection.WebPageTo.Url == webPageFromLink.Url);
+
+                                if (connection == null)
+                                {
+                                    connection = new WebPageConnection { WebPageFrom = webPage, WebPageTo = webPageFromLink };
+                                    unitOfWork.WebPagesConnections.Add(connection);
+                                }
+                            }
+
+                            unitOfWork.Save();
+                        }
                     }
                     else
                     {
@@ -63,11 +80,26 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
             }
         }
 
+        private IEnumerable<Link> GetLinksFromWebPage(WebPage webPage)
+        {
+            var content = _webPageContentGetter.GetWebPageContent(webPage.Url);
+            return _htmlParser.Parse(content).Links;
+        }
+
         public void Start()
         {
-            foreach (var item in _entityRepository.GetAll())
+            while (true)
             {
-                ResolveSubPagesForWebPage(item);
+                IEnumerable<WebPage> allWebPages;
+                using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
+                {
+                    allWebPages = new List<WebPage>(unitOfWork.WebPages.GetAll());
+                }
+                    
+                foreach (var webPage in allWebPages)
+                {
+                    ResolveSubPagesForWebPage(webPage);
+                }
             }
         }
     }

@@ -1,42 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WebSearcher.DataAccess.Abstract;
 using WebSearcher.DataAccess.Context;
 using WebSearcher.Entities;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System;
 
 namespace WebSearcher.DataAccess.Concrete
 {
-    public class EntityRepository<T>: IEntityRepository<T> where T: Entity
+    public class EntityRepository<TEntity> : IEntityRepository<TEntity> where TEntity : Entity
     {
-        private readonly WebSearcherContext<T> _baseEntityContext;
+        private readonly WebSearcherContext _webSearcherContext;
+        private DbSet<TEntity> dbSet;
 
-        public EntityRepository(WebSearcherContext<T> baseEntityContext)
+        public EntityRepository(WebSearcherContext webSearcherContext)
         {
-            _baseEntityContext = baseEntityContext;
+            _webSearcherContext = webSearcherContext;
+            dbSet = webSearcherContext.Set<TEntity>();
         }
 
-        public virtual void Add(T entity)
+        public virtual void Add(TEntity entity)
         {
-            _baseEntityContext.Entities.Add(entity);
-            _baseEntityContext.SaveChanges();
+            dbSet.Add(entity);
         }
 
-        public virtual void AddBulk(IEnumerable<T> entities)
+        public virtual TEntity Find(Expression<Func<TEntity,bool>> expression)
         {
-            _baseEntityContext.Entities.AddRange(entities);
-            _baseEntityContext.SaveChanges();
+            return dbSet.FirstOrDefault(expression);
         }
 
-        public virtual T Get(int id)
+        public virtual void AddBulk(IEnumerable<TEntity> entities)
         {
-            return (T) _baseEntityContext.Entities.Single(entity => entity.Id == id);
+            dbSet.AddRange(entities);        
         }
 
-        public virtual IEnumerable<T> GetAll()
+        public virtual TEntity Get(int id)
         {
-            return (IEnumerable<T>) _baseEntityContext.Entities;
+            return dbSet.Single(entity => entity.Id == id);
+        }
+
+        public virtual IEnumerable<TEntity> GetAll()
+        {
+            return dbSet;
+        }
+
+        public void Save()
+        {
+            _webSearcherContext.SaveChanges();
         }
     }
 }

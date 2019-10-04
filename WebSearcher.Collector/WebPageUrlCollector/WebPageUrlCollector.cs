@@ -1,7 +1,8 @@
 ﻿using System.Threading;
-using WebSearcher.Collector.Synchronizer;
 using WebSearcher.Common;
 using WebSearcher.Common.Logger;
+using WebSearcher.DataAccess.Abstract;
+using WebSearcher.DataAccess.Concrete;
 using WebSearcher.Entities;
 
 namespace WebSearcher.Collector.WebPageUrlCollector
@@ -10,17 +11,18 @@ namespace WebSearcher.Collector.WebPageUrlCollector
     {
         private readonly IWebPageUrlGenerator _urlGenerator;
         private readonly IWebPageUrlChecker _urlChecker;
-        private readonly ILogger _logger = new Logger();
-        private readonly DataSynchronizer<WebPage> _webPageDataSynchronizer;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker(), new DataSynchronizerFactory())
+        private readonly ILogger _logger = new Logger();
+
+        public WebPageUrlCollector() : this(new WebPageUrlGenerator(), new WebPageUrlChecker(), new UnitOfWorkFactory())
         {}
 
-        public WebPageUrlCollector(IWebPageUrlGenerator webPageUrlGenerator, IWebPageUrlChecker webPageUrlChecker, IDataSynchronizerFactory dataSynchronizerFactory)
+        public WebPageUrlCollector(IWebPageUrlGenerator webPageUrlGenerator, IWebPageUrlChecker webPageUrlChecker, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _urlGenerator = webPageUrlGenerator;
             _urlChecker = webPageUrlChecker;
-            _webPageDataSynchronizer = dataSynchronizerFactory.CreateDataSynchronizer<WebPage>();
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         private async void TryRandomWebpage()
@@ -32,9 +34,18 @@ namespace WebSearcher.Collector.WebPageUrlCollector
             if (isWebPageWorking)
             {
                 _logger.Debug($"Found working webpage with url: {randomWebPage}");
-                _webPageDataSynchronizer.AddIfUnique(new Entities.WebPage() { Url = randomWebPage });
+
+                using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
+                {
+                    if (unitOfWork.WebPages.Find(webPage => webPage.Url == randomWebPage) == null)
+                    {
+                        unitOfWork.WebPages.Add(new WebPage() { Url = randomWebPage });
+                        unitOfWork.Save();
+                    }
+                }
             }
-            else {
+            else
+            {
                 _logger.Debug($"Url: {randomWebPage} not wokring");
             }
         }
