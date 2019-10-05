@@ -1,6 +1,9 @@
 ﻿using HtmlParser.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Internal;
+using WebSearcher.Collector.Extensions;
 using WebSearcher.Common;
 using WebSearcher.Common.Logger;
 using WebSearcher.DataAccess.Abstract;
@@ -29,6 +32,29 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
         }
 
         private async void ResolveSubPagesForWebPage(WebPage webPage)
+        {
+            var linkedWebPages = GetLinksFromWebPage(webPage)
+                .GetWorkingLinks()
+                .GetNewLinks()
+                .CreateWebPagesFromLinks()
+                .ToList();
+
+            if (!linkedWebPages.Any())
+                return;
+
+            var webPageToLinkedWebPagesConnections = webPage.CreateConnections(linkedWebPages).GetNewConnections();
+
+            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
+            {
+                unitOfWork.WebPages.AddBulk(linkedWebPages);
+                unitOfWork.Save();
+
+                unitOfWork.WebPagesConnections.AddBulk(webPageToLinkedWebPagesConnections);
+                unitOfWork.Save();
+            }
+        }
+
+        private async void ResolveSubPagesForWebPage2(WebPage webPage)
         {
             try
             {

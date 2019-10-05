@@ -15,8 +15,8 @@ namespace WebSearcher.DataAccess.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-OMV8OT1\SQLEXPRESS;Initial Catalog=WebSearcher;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            //optionsBuilder.UseSqlServer(@"Data Source=AWMACHINE\AWSQL;Initial Catalog=WebSearcher;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-OMV8OT1\SQLEXPRESS;Initial Catalog=WebSearcher;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer(@"Data Source=AWMACHINE\AWSQL;Initial Catalog=WebSearcher;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
     }
 }
