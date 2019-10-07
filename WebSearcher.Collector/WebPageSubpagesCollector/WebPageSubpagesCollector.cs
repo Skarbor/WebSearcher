@@ -46,9 +46,8 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
 
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
             {
+                unitOfWork.WebPages.Get(webPage.Id);
                 unitOfWork.WebPages.AddBulk(linkedWebPages);
-                unitOfWork.Save();
-
                 unitOfWork.WebPagesConnections.AddBulk(webPageToLinkedWebPagesConnections);
                 unitOfWork.Save();
             }
