@@ -31,7 +31,7 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        private async void ResolveSubPagesForWebPage(WebPage webPage)
+        private void ResolveSubPagesForWebPage(WebPage webPage)
         {
             var linkedWebPages = GetLinksFromWebPage(webPage)
                 .GetWorkingLinks()
@@ -46,62 +46,10 @@ namespace WebSearcher.Collector.WebPageSubPagesCollector
 
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
             {
-                unitOfWork.WebPages.Get(webPage.Id);
+                unitOfWork.WebPages.Get(webPage.Id); //EF requires this
                 unitOfWork.WebPages.AddBulk(linkedWebPages);
                 unitOfWork.WebPagesConnections.AddBulk(webPageToLinkedWebPagesConnections);
                 unitOfWork.Save();
-            }
-        }
-
-        private async void ResolveSubPagesForWebPage2(WebPage webPage)
-        {
-            try
-            {
-                var links = GetLinksFromWebPage(webPage);
-
-                foreach (var link in links)
-                {
-                    var isWebPageWorking = await _webPageUrlChecker.CheckIfPageIsWorkingAsync(link.Url);
-
-                    if (isWebPageWorking)
-                    {
-                        using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
-                        {
-                            var webPageFromLink = unitOfWork.WebPages.Find(_webPage => _webPage.Url == link.Url);
-
-                            if (webPageFromLink == null)
-                            {
-                                _logger.Debug($"Found working webpage with url: {link.Url}");
-                                webPageFromLink = new WebPage() { Url = link.Url };
-                                unitOfWork.WebPages.Add(webPageFromLink);
-
-                                _logger.Debug($"Adding connection between {webPage.Url} and {link.Url} to database");
-                                unitOfWork.WebPagesConnections.Add(new WebPageConnection() { WebPageFrom = webPage, WebPageTo = webPageFromLink });
-                            }
-                            else
-                            {
-                                var connection = unitOfWork.WebPagesConnections.Find(_webPageConnection => _webPageConnection.WebPageFrom.Url == webPage.Url 
-                                                && _webPageConnection.WebPageTo.Url == webPageFromLink.Url);
-
-                                if (connection == null)
-                                {
-                                    connection = new WebPageConnection { WebPageFrom = webPage, WebPageTo = webPageFromLink };
-                                    unitOfWork.WebPagesConnections.Add(connection);
-                                }
-                            }
-
-                            unitOfWork.Save();
-                        }
-                    }
-                    else
-                    {
-                        _logger.Debug($"Url: {link.Url} not working");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Error occured: {ex.Message}");
             }
         }
 
