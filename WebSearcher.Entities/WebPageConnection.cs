@@ -2,7 +2,7 @@
 {
     public class WebPageConnection : Entity
     {
-        public WebPage WebPageFrom { get; set; }
-        public WebPage WebPageTo { get; set; }
+        public virtual WebPage WebPageFrom { get; set; }
+        public virtual WebPage WebPageTo { get; set; }
     }
 }
